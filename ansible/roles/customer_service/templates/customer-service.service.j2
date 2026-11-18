@@ -1,0 +1,19 @@
+[Unit]
+Description=Customer Service Complaint Management System REST API
+After=network.target
+
+[Service]
+Type=simple
+User={{ app_user }}
+Group={{ app_group }}
+WorkingDirectory={{ app_dir }}
+Environment="PORT={{ app_port }}"
+Environment="PATH={{ app_venv_dir }}/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin"
+ExecStart={{ app_venv_dir }}/bin/python {{ app_dir }}/run.py
+Restart=always
+RestartSec=5
+StandardOutput=journal
+StandardError=journal
+
+[Install]
+WantedBy=multi-user.target

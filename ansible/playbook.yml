@@ -1,0 +1,8 @@
+---
+- name: Deploy Customer Service Complaint Management System
+  hosts: webservers
+  become: true
+  gather_facts: true
+
+  roles:
+    - customer_service

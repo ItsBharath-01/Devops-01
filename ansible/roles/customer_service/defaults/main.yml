@@ -1,0 +1,12 @@
+---
+# Defaults variables for customer_service role
+app_name: customer-service
+app_user: root
+app_group: root
+app_port: 5000
+app_host: 0.0.0.0
+app_dir: /opt/customer-service
+app_venv_dir: "{{ app_dir }}/venv"
+app_service_name: customer-service
+app_python_bin: python3
+systemd_service_path: /etc/systemd/system
