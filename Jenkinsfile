@@ -51,13 +51,13 @@ pipeline {
                         sh '''
                             . venv/bin/activate
                             mkdir -p test-results
-                            pytest tests/test_app.py --junitxml=test-results/results.xml -v
+                            PYTHONPATH="$WORKSPACE" python -m pytest tests/test_app.py --junitxml=test-results/results.xml -v
                         '''
                     } else {
                         bat '''
                             call venv\\Scripts\\activate.bat
                             if not exist test-results mkdir test-results
-                            pytest tests/test_app.py --junitxml=test-results/results.xml -v
+                            PYTHONPATH="$WORKSPACE" python -m pytest tests/test_app.py --junitxml=test-results/results.xml -v
                         '''
                     }
                 }
