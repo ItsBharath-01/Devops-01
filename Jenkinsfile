@@ -43,32 +43,33 @@ pipeline {
             }
         }
 
-        stage('Automated Pytest Suite (CI Enhancement)') {
-            steps {
-                echo '=== Stage 3: Running automated unit tests and generating JUnit test report ==='
-                script {
-                    if (isUnix()) {
-                        sh '''
-                            . venv/bin/activate
-                            mkdir -p test-results
-                            pytest tests/test_app.py --junitxml=test-results/results.xml -v
-                        '''
-                    } else {
-                        bat '''
-                            call venv\\Scripts\\activate.bat
-                            if not exist test-results mkdir test-results
-                            pytest tests/test_app.py --junitxml=test-results/results.xml -v
-                        '''
-                    }
-                }
-            }
-            post {
-                always {
-                    // Record test results for Jenkins UI dashboard and trend reports
-                    junit testResults: 'test-results/results.xml', allowEmptyResults: true
-                }
+       stage('Automated Pytest Suite (CI Enhancement)') {
+    steps {
+        echo '=== Stage 3: Running automated unit tests and generating JUnit test report ==='
+        script {
+            if (isUnix()) {
+                sh '''
+                    . venv/bin/activate
+                    mkdir -p test-results
+                    export PYTHONPATH="$WORKSPACE:$PYTHONPATH"
+                    python -m pytest tests/test_app.py --junitxml=test-results/results.xml -v
+                '''
+            } else {
+                bat '''
+                    call venv\\Scripts\\activate.bat
+                    if not exist test-results mkdir test-results
+                    set PYTHONPATH=%WORKSPACE%
+                    python -m pytest tests/test_app.py --junitxml=test-results/results.xml -v
+                '''
             }
         }
+    }
+    post {
+        always {
+            junit testResults: 'test-results/results.xml', allowEmptyResults: true
+        }
+    }
+}
 
         stage('Package Application') {
             steps {
